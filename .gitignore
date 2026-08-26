@@ -1,0 +1,46 @@
+# ---------------------------------------------------------------------------
+# Source data — never commit. DESI's zall-pix-iron.fits is ~22 GB.
+# Download it from data.desi.lbl.gov (see README, "Get the source data").
+# ---------------------------------------------------------------------------
+*.fits
+mock.fits
+
+# ---------------------------------------------------------------------------
+# Generated catalog payloads — never commit.
+#
+# These are the actual addon data files, 22 MB (lite) to 1.4 GB (insane).
+# Every one except lite's CSV exceeds GitHub's 100 MB per-file hard limit,
+# and they are fully reproducible from convert.py. They ship as GitHub
+# Release assets instead.
+#
+# The addon README.md and CITATIONS.txt beside them ARE tracked, so the
+# repo still shows exactly what each tier ships without carrying the bulk.
+# ---------------------------------------------------------------------------
+addons/*/catalogs/
+
+# Scratch output from test runs (see README, "Test without downloading DESI")
+test_out/
+
+# Local snapshot tarballs
+*.tar.gz
+*.zip
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# ---------------------------------------------------------------------------
+# Editors / OS
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
