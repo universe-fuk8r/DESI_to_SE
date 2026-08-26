@@ -31,12 +31,16 @@ how aggressively they're filtered and subsampled. Each ships as a
 separate release asset. **Install exactly one** — they overlap, so
 installing two loads both and duplicates every shared object.
 
-| Tier   | Galaxies | QSOs   | Download | Installed | RAM    | Notes                                   |
-|--------|---------:|-------:|---------:|----------:|--------|-----------------------------------------|
-| lite   |     250k |      0 |    ~7 MB |     22 MB | any    | BGS at z<0.4. Runs on anything.         |
-| normal |     2.5M |      0 |   ~70 MB |    216 MB | 16 GB  | BGS+LRG+ELG to z~1.6. No QSOs.          |
-| heavy  |       6M |   400k |  ~180 MB |    568 MB | 16-32 GB | Adds QSOs to z~3.                     |
-| insane |    14.1M |  1.65M |  ~445 MB |    1.4 GB | 32 GB+ | Full DR1 main extragalactic. Wants RAM. |
+| Tier   | Galaxies | QSOs   | Download | RAM      | Notes                                   |
+|--------|---------:|-------:|---------:|----------|-----------------------------------------|
+| lite   |     250k |      0 |   6.7 MB | any      | BGS at z<0.4. Runs on anything.         |
+| normal |     2.5M |      0 |    63 MB | 16 GB    | BGS+LRG+ELG to z~1.6. No QSOs.          |
+| heavy  |       6M |   400k |   157 MB | 16-32 GB | Adds QSOs to z~3.                       |
+| insane |    14.1M |  1.65M |   378 MB | 32 GB+   | Full DR1 main extragalactic. Wants RAM. |
+
+Download size is also the on-disk size — the `.pak` stays packed, so
+there's no unpacked catalog tree to store. (Uncompressed, the catalogs
+would be 22 MB / 216 MB / 568 MB / 1.4 GB respectively.)
 
 The RAM column is what SpaceEngine wants at runtime to load the tier;
 building a tier yourself has its own, larger appetite (see
@@ -50,29 +54,43 @@ close to Earth. Quality cut is `ZWARN==0` and `ZCAT_PRIMARY==True`
 
 ## Installing a prebuilt addon
 
-Prebuilt tiers are attached to [Releases](../../releases) as
-`DESI_DR1_<tier>.zip`. No Python, no DESI download, no build.
+Prebuilt tiers are attached to [Releases](../../releases). No Python, no
+DESI download, no build. Each tier comes two ways — pick either:
 
-1. Download one tier's zip.
-2. Unzip it into your SpaceEngine `addons/` directory, so you end up
-   with:
+- **`DESI_DR1_<tier>.pak`** — just the catalog data. Drop it straight
+  into your `addons` folder. Nothing to unzip.
+- **`DESI_DR1_<tier>.zip`** — the same `.pak` plus the per-tier README
+  and `CITATIONS.txt`. Unzip into `addons`, giving you:
 
-   ```
-   SpaceEngine/addons/DESI_DR1_heavy/
-     catalogs/galaxies/desi_galaxies.csv
-     catalogs/galaxies/desi_qsos.sc
-     README.md
-     CITATIONS.txt
-   ```
+  ```
+  addons/DESI_DR1_heavy/
+    DESI_DR1_heavy.pak      <- leave this packed
+    README.md
+    CITATIONS.txt
+  ```
 
-3. Launch SpaceEngine. The catalog loads at startup — expect a
-   noticeably longer first launch on heavy and insane.
+Then launch SpaceEngine. The catalog loads at startup — expect a
+noticeably longer first launch on heavy and insane. **Leave the `.pak`
+packed either way**; SE reads it as an archive.
+
+As of SpaceEngine 0.991.50.2140 (May 2026) there are three locations SE
+searches for addons:
+
+```
+%USERPROFILE%\Documents\Cosmographic\SpaceEngine\addons\    <- recommended
+SpaceEngine\addons\    (Steam install folder)
+SpaceEngine\data\
+```
+
+The Documents path is the recommended one, since Steam can overwrite the
+install folder on update or file verification.
 
 To uninstall, delete the folder. Nothing is written outside it.
 
-The `catalogs/` layout is what SE looks for, so keep the directory
-structure intact when unzipping. If your unzip tool creates a nested
-`DESI_DR1_heavy/DESI_DR1_heavy/`, move the inner folder up one level.
+If the addon doesn't appear: clear SE's cache by deleting
+`%LOCALAPPDATA%\Cosmographic\SpaceEngine` and relaunch (SE rebuilds it),
+and check `se.log` in SpaceEngine's system folder for catalog parse
+errors.
 
 ## Building it yourself
 
@@ -165,18 +183,54 @@ committing to the multi-GB real-data download.
 
 ### Packaging a release
 
-To cut a release, zip each addon directory with its layout preserved:
+`convert.py` writes loose `catalogs/` directories. Turning those into
+release assets is a separate step:
 
 ```
-for t in lite normal heavy insane; do
-  (cd addons && zip -r -9 "../DESI_DR1_$t.zip" "DESI_DR1_$t")
-done
+./package_release.sh                # all four tiers
+./package_release.sh lite heavy     # named tiers only
 ```
 
-Attach the four zips to a GitHub Release. They compress to roughly
-7 MB / 70 MB / 180 MB / 445 MB — all comfortably inside the 2 GB
-per-asset release limit. Release body copy for each tier is in
+For each tier that produces two release assets in `dist/`:
+
+```
+DESI_DR1_<tier>.pak        # standalone: catalogs/ at the archive root
+DESI_DR1_<tier>.zip        # the same .pak plus the docs:
+  DESI_DR1_<tier>/
+    DESI_DR1_<tier>.pak
+    README.md              # readable without unpacking
+    CITATIONS.txt          # CC BY 4.0 attribution
+```
+
+A bare `.pak` dropped into `addons/` is a complete, valid install, so
+both forms are worth publishing — the `.pak` for people who just want it
+working, the `.zip` for people who want the caveats and citations to
+travel with the data. The wrapper zip hardlinks the pak rather than
+copying it, so producing both costs no extra compression time.
+
+**The `.pak` internal layout is not arbitrary.** Per the
+[SpaceEngine manual](https://spaceengine.org/manual/making-addons/):
+
+> "The pak file cannot contain additional subfolders, only default ones
+> are allowed."
+
+The topmost entries inside a `.pak` must be standard SE folders
+(`catalogs`, `models`, `textures`). Zipping the `DESI_DR1_<tier>`
+directory itself puts a non-standard folder at the archive root and SE
+silently won't load it — an easy and near-invisible mistake, so
+`package_release.sh` asserts the `.pak` root is exactly `catalogs/`
+before it finishes. The wrapper zip is stored uncompressed (`-0`),
+because recompressing an already-compressed `.pak` costs minutes and
+saves nothing.
+
+Attach the four zips to a GitHub Release — all are far inside the 2 GB
+per-asset limit. Release body copy for each tier is in
 [RELEASE_NOTES.md](RELEASE_NOTES.md).
+
+Note that the addon `README.md` describes the packaged `.pak` layout,
+not the loose `catalogs/` tree that `convert.py` emits — it ships next
+to the `.pak`, so by the time anyone reads it the packaging step has
+already run.
 
 ## Design notes
 

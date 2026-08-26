@@ -21,6 +21,10 @@ addons/*/catalogs/
 # Scratch output from test runs (see README, "Test without downloading DESI")
 test_out/
 
+# Packaged release assets (rebuild with ./package_release.sh)
+dist/
+*.pak
+
 # Local snapshot tarballs
 *.tar.gz
 *.zip

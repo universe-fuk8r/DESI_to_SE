@@ -260,19 +260,47 @@ correct comoving distances under DESI's fiducial flat ΛCDM cosmology
 
 ## Installation
 
-Drop this folder into your SpaceEngine `addons/` directory so the path
-becomes:
+Copy this whole `DESI_DR1_{tier.name}` folder into a SpaceEngine `addons`
+directory. As of SpaceEngine 0.991.50.2140 (May 2026) there are three
+places SE looks:
 
 ```
-SpaceEngine/addons/DESI_DR1_{tier.name}/
+%USERPROFILE%\\Documents\\Cosmographic\\SpaceEngine\\addons\\    <- recommended
+SpaceEngine\\addons\\    (Steam install folder)
+SpaceEngine\\data\\
 ```
 
-Then launch SpaceEngine — the catalog loads at startup. Keep the
-`catalogs/` subdirectory structure intact; that's what SE looks for. If
-your unzip tool nested the folder inside another folder of the same
-name, move the inner one up a level.
+The Documents location is recommended — Steam can overwrite the install
+folder when the game updates or you verify file integrity, which would
+take the addon with it.
+
+You should end up with:
+
+```
+...\\addons\\DESI_DR1_{tier.name}\\
+    DESI_DR1_{tier.name}.pak
+    README.md
+    CITATIONS.txt
+```
+
+**Leave the `.pak` packed.** SpaceEngine reads it as an archive; it does
+not need unpacking. Then launch SpaceEngine — the catalog loads at
+startup. Expect a noticeably longer first launch on the heavy and
+insane tiers.
 
 To uninstall, delete this folder. Nothing is written outside it.
+
+### If the addon doesn't show up
+
+- **Clear SE's cache and restart.** Delete
+  `%LOCALAPPDATA%\\Cosmographic\\SpaceEngine` — SE rebuilds it on next
+  launch. This isn't normally required, but it clears stale filesystem
+  entries that can hide a newly added addon.
+- **Check `se.log`** in SpaceEngine's system folder for catalog parse
+  errors.
+- **Don't nest the folder.** If your unzip tool produced
+  `DESI_DR1_{tier.name}\\DESI_DR1_{tier.name}\\`, move the inner one up a
+  level.
 
 ## Recommendations for the best experience
 

@@ -44,16 +44,28 @@ distances, mapping the actual large-scale structure of the universe out to
 
 ## Install
 
-1. Download `DESI_DR1_{TIER}.zip` below.
-2. Unzip into your SpaceEngine `addons/` directory, so you get
-   `SpaceEngine/addons/DESI_DR1_{TIER}/catalogs/...`
-3. Launch SpaceEngine.
+Pick either asset below:
 
-Keep the `catalogs/` structure intact. To uninstall, delete the folder —
-nothing is written outside it.
+- `DESI_DR1_{TIER}.pak` — just the data. Drop it into your `addons`
+  folder. Nothing to unzip.
+- `DESI_DR1_{TIER}.zip` — the same `.pak` plus a README and
+  CITATIONS.txt. Unzip into `addons`.
 
-Download {DOWNLOAD_SIZE_FOR_TIER}, {INSTALLED_SIZE_FOR_TIER} on disk once
-unzipped.
+Then launch SpaceEngine. **Leave the `.pak` packed either way** —
+SpaceEngine reads it as an archive.
+
+As of SpaceEngine 0.991.50.2140 (May 2026), the recommended addons
+location is `%USERPROFILE%\Documents\Cosmographic\SpaceEngine\addons\`.
+`SpaceEngine\addons\` in the Steam install folder also works, but Steam
+can overwrite it on update or file verification.
+
+To uninstall, delete the folder — nothing is written outside it.
+
+Download {DOWNLOAD_SIZE_FOR_TIER}, {INSTALLED_SIZE_FOR_TIER} on disk.
+
+**Addon not showing up?** Delete `%LOCALAPPDATA%\Cosmographic\SpaceEngine`
+to clear SE's cache and relaunch (SE rebuilds it), then check `se.log` in
+SpaceEngine's system folder for catalog parse errors.
 
 ## Recommended hardware
 
@@ -133,8 +145,8 @@ License: addon code MIT, DESI data CC BY 4.0.
 {N_QSOS_FOR_TIER}              = (omit the line)
 {REDSHIFT_RANGE_FOR_THIS_TIER} = z<0.4
 {MAX_LY_FOR_TIER}              = 5 billion light-years
-{DOWNLOAD_SIZE_FOR_TIER}       = ~7 MB
-{INSTALLED_SIZE_FOR_TIER}      = 22 MB
+{DOWNLOAD_SIZE_FOR_TIER}       = 6.7 MB
+{INSTALLED_SIZE_FOR_TIER}      = 6.7 MB (the .pak stays packed)
 ```
 
 **NORMAL**
@@ -144,8 +156,8 @@ License: addon code MIT, DESI data CC BY 4.0.
 {N_QSOS_FOR_TIER}              = (omit the line)
 {REDSHIFT_RANGE_FOR_THIS_TIER} = z<1.6
 {MAX_LY_FOR_TIER}              = 16 billion light-years
-{DOWNLOAD_SIZE_FOR_TIER}       = ~70 MB
-{INSTALLED_SIZE_FOR_TIER}      = 216 MB
+{DOWNLOAD_SIZE_FOR_TIER}       = 63 MB
+{INSTALLED_SIZE_FOR_TIER}      = 63 MB (the .pak stays packed)
 ```
 
 **HEAVY**
@@ -155,8 +167,8 @@ License: addon code MIT, DESI data CC BY 4.0.
 {N_QSOS_FOR_TIER}              = ~400,000
 {REDSHIFT_RANGE_FOR_THIS_TIER} = z<3
 {MAX_LY_FOR_TIER}              = 21 billion light-years
-{DOWNLOAD_SIZE_FOR_TIER}       = ~180 MB
-{INSTALLED_SIZE_FOR_TIER}      = 568 MB
+{DOWNLOAD_SIZE_FOR_TIER}       = 157 MB
+{INSTALLED_SIZE_FOR_TIER}      = 157 MB (the .pak stays packed)
 ```
 
 **INSANE**
@@ -166,13 +178,14 @@ License: addon code MIT, DESI data CC BY 4.0.
 {N_QSOS_FOR_TIER}              = ~1,650,000 (full DR1)
 {REDSHIFT_RANGE_FOR_THIS_TIER} = z up to ~5
 {MAX_LY_FOR_TIER}              = over 26 billion light-years
-{DOWNLOAD_SIZE_FOR_TIER}       = ~445 MB
-{INSTALLED_SIZE_FOR_TIER}      = 1.4 GB
+{DOWNLOAD_SIZE_FOR_TIER}       = 378 MB
+{INSTALLED_SIZE_FOR_TIER}      = 378 MB (the .pak stays packed)
 ```
 
-Download sizes are estimates from measured compression ratios (~3.2x on
-the galaxy CSVs, ~4.7x on the quasar SC files). Replace them with the
-actual zip sizes once you've packaged the release.
+Sizes above are measured from the actual release assets built by
+`./package_release.sh` on 2026-08-26. Because the `.pak` is never
+unpacked, download size and on-disk size are the same; the uncompressed
+catalog trees would be 22 MB / 216 MB / 568 MB / 1.4 GB.
 
 ---
 
