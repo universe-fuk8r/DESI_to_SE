@@ -341,6 +341,16 @@ This code: MIT (see `LICENSE`).
 DESI DR1 data this code processes: CC BY 4.0 (DESI Collaboration).
 SpaceEngine itself: proprietary, by Cosmographic Software.
 
+MIT requires the copyright notice — which includes this repo's URL — to
+be kept in copies and modified versions, so a fork carries a pointer
+back here by default.
+
+If you re-host the built addons somewhere else, a link back to this repo
+is appreciated so people can find the build pipeline and the DESI
+citations. That's a request, not a condition. Do note that the addons
+contain DESI data, and CC BY 4.0 requires you to credit DESI wherever
+they end up — see `CITATIONS.txt` inside each `.pak`.
+
 This project is not affiliated with the DESI collaboration or with
 SpaceEngine / Cosmographic Software. It's a community contribution
 that uses both via their public APIs and addon system.
