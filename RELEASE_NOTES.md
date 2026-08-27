@@ -31,15 +31,15 @@ one heading. If you cut them separately, tag per tier
 Imports the **Dark Energy Spectroscopic Instrument (DESI) Data Release 1**
 catalog into SpaceEngine. Real galaxies and quasars at correct cosmological
 distances, mapping the actual large-scale structure of the universe out to
-{REDSHIFT_RANGE_FOR_THIS_TIER — e.g. "z~0.4" / "z~1.6" / "z~3" / "z>5"}.
+{REDSHIFT_RANGE_FOR_THIS_TIER — e.g. "z~0.4" / "z~1.6" / "z~3" / "z~7"}.
 
 ## What you get
 
 - **{N_GALAXIES_FOR_TIER}** real galaxies with measured redshifts
 - **{N_QSOS_FOR_TIER}** real quasars *(omit this line for lite/normal)*
 - Distances span from ~46 million light-years (just outside the Local
-  Group) to {MAX_LY_FOR_TIER — e.g. "5 billion ly" / "16 billion ly" /
-  "21 billion ly" / "26+ billion ly"}
+  Group) to {MAX_LY_FOR_TIER — e.g. "5 billion ly" / "15 billion ly" /
+  "21 billion ly" / "28+ billion ly"}
 - Filaments, voids, and the cosmic web become directly explorable
 
 ## Install
@@ -156,7 +156,7 @@ License: addon code MIT, DESI data CC BY 4.0.
 {N_GALAXIES_FOR_TIER}          = ~2,500,000
 {N_QSOS_FOR_TIER}              = (omit the line)
 {REDSHIFT_RANGE_FOR_THIS_TIER} = z<1.6
-{MAX_LY_FOR_TIER}              = 16 billion light-years
+{MAX_LY_FOR_TIER}              = 15 billion light-years
 {DOWNLOAD_SIZE_FOR_TIER}       = 63 MB
 {INSTALLED_SIZE_FOR_TIER}      = 63 MB (the .pak stays packed)
 ```
@@ -177,16 +177,22 @@ License: addon code MIT, DESI data CC BY 4.0.
 ```
 {N_GALAXIES_FOR_TIER}          = ~14,100,000 (full DR1)
 {N_QSOS_FOR_TIER}              = ~1,650,000 (full DR1)
-{REDSHIFT_RANGE_FOR_THIS_TIER} = z up to ~5
-{MAX_LY_FOR_TIER}              = over 26 billion light-years
+{REDSHIFT_RANGE_FOR_THIS_TIER} = z up to ~7
+{MAX_LY_FOR_TIER}              = over 28 billion light-years
 {DOWNLOAD_SIZE_FOR_TIER}       = 378 MB
 {INSTALLED_SIZE_FOR_TIER}      = 378 MB (the .pak stays packed)
 ```
 
 Sizes above are measured from the actual release assets built by
-`./package_release.sh` on 2026-08-26. Because the `.pak` is never
-unpacked, download size and on-disk size are the same; the uncompressed
-catalog trees would be 22 MB / 216 MB / 568 MB / 1.4 GB.
+`./package_release.sh` on 2026-08-26. Reach figures are measured from the
+shipped catalogs too: max comoving distance is 1.606 / 4.670 / 6.513 /
+8.770 Gpc for lite / normal / heavy / insane (5.24 / 15.23 / 21.24 /
+28.60 Gly). Heavy's ceiling is exactly z=3, its `z_max_qso` cut; insane
+is uncapped and its furthest quasar lands at z~6.86.
+
+Because the `.pak` is never unpacked, download size and on-disk size are
+the same; the uncompressed catalog trees would be 22 MB / 216 MB /
+568 MB / 1.4 GB.
 
 ---
 
