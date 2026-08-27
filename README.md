@@ -57,10 +57,11 @@ close to Earth. Quality cut is `ZWARN==0` and `ZCAT_PRIMARY==True`
 Prebuilt tiers are attached to [Releases](../../releases). No Python, no
 DESI download, no build. Each tier comes two ways — pick either:
 
-- **`DESI_DR1_<tier>.pak`** — just the catalog data. Drop it straight
-  into your `addons` folder. Nothing to unzip.
-- **`DESI_DR1_<tier>.zip`** — the same `.pak` plus the per-tier README
-  and `CITATIONS.txt`. Unzip into `addons`, giving you:
+- **`DESI_DR1_<tier>.pak`** — the whole addon in one file. Drop it
+  straight into your `addons` folder. Nothing to unzip.
+- **`DESI_DR1_<tier>.zip`** — the same `.pak`, with the per-tier README
+  and `CITATIONS.txt` also unpacked alongside it so you can read them
+  without opening an archive. Unzip into `addons`, giving you:
 
   ```
   addons/DESI_DR1_heavy/
@@ -194,19 +195,28 @@ release assets is a separate step:
 For each tier that produces two release assets in `dist/`:
 
 ```
-DESI_DR1_<tier>.pak        # standalone: catalogs/ at the archive root
-DESI_DR1_<tier>.zip        # the same .pak plus the docs:
-  DESI_DR1_<tier>/
-    DESI_DR1_<tier>.pak
-    README.md              # readable without unpacking
-    CITATIONS.txt          # CC BY 4.0 attribution
+DESI_DR1_<tier>.pak        # standalone, self-contained:
+  catalogs/                #   the only root-level folder
+  README.md                #   root-level files
+  CITATIONS.txt
+DESI_DR1_<tier>.zip        # the same .pak, plus loose copies of the
+  DESI_DR1_<tier>/         #   two docs so they're readable without
+    DESI_DR1_<tier>.pak    #   unpacking anything
+    README.md
+    CITATIONS.txt
 ```
+
+`README.md` and `CITATIONS.txt` live inside the `.pak` as well as beside
+it, so the DESI CC BY 4.0 attribution travels with the data no matter
+which asset someone downloads. They're root-level *files*, which the
+manual's subfolder restriction doesn't cover — only directories at the
+pak root have to be standard SE names.
 
 A bare `.pak` dropped into `addons/` is a complete, valid install, so
 both forms are worth publishing — the `.pak` for people who just want it
-working, the `.zip` for people who want the caveats and citations to
-travel with the data. The wrapper zip hardlinks the pak rather than
-copying it, so producing both costs no extra compression time.
+working, the `.zip` for people who want to read the caveats without
+opening an archive. The wrapper zip hardlinks the pak rather than copying
+it, so producing both costs no extra compression time.
 
 **The `.pak` internal layout is not arbitrary.** Per the
 [SpaceEngine manual](https://spaceengine.org/manual/making-addons/):

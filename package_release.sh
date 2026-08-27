@@ -55,15 +55,21 @@ for tier in "${TIERS[@]}"; do
     rm -rf "$DIST_DIR/.staging"
     mkdir -p "$staging"
 
-    # 1. The .pak: catalogs/ at the archive root, nothing above it.
+    # 1. The .pak: catalogs/ at the archive root, nothing above it, plus
+    #    README.md and CITATIONS.txt as root-level *files* so the DESI
+    #    CC BY 4.0 attribution travels inside the artifact itself.
+    #    Root-level files are fine - the manual's restriction is on
+    #    additional *subfolders*, not on files.
     #    -9 because these ship once and download many times.
     #    Kept in dist/ as a standalone asset - a .pak dropped straight
     #    into addons/ is a valid install with no unzip step.
     rm -f "$DIST_DIR/$name.pak"
-    ( cd "$src" && zip -q -r -9 "$OLDPWD/$DIST_DIR/$name.pak" catalogs )
+    ( cd "$src" && zip -q -r -9 "$OLDPWD/$DIST_DIR/$name.pak" \
+        catalogs README.md CITATIONS.txt )
 
-    # 2. Also assemble the folder form, which carries the docs. Hardlink
-    #    the pak rather than copying - these run to hundreds of MB.
+    # 2. Also assemble the folder form, where the docs are readable
+    #    without unpacking anything. Hardlink the pak rather than
+    #    copying - these run to hundreds of MB.
     ln "$DIST_DIR/$name.pak" "$staging/$name.pak"
     cp "$src/README.md" "$src/CITATIONS.txt" "$staging/"
 
@@ -77,17 +83,32 @@ for tier in "${TIERS[@]}"; do
     echo "    $DIST_DIR/$name.zip  ($(du -h "$DIST_DIR/$name.zip" | cut -f1))"
 done
 
-echo
-echo "Verifying .pak roots (must contain only standard SE folders):"
+echo "Verifying .pak layout:"
+echo "  - only standard SE folders at the archive root"
+echo "  - README.md and CITATIONS.txt present"
 for tier in "${TIERS[@]}"; do
     name="DESI_DR1_${tier}"
     pak="$DIST_DIR/$name.pak"
     [ -f "$pak" ] || continue
-    roots=$(unzip -Z1 "$pak" | cut -d/ -f1 | sort -u | tr '\n' ' ')
-    case "$roots" in
-        "catalogs ") echo "    $name.pak: OK ($roots)" ;;
-        *)           echo "    $name.pak: BAD ROOT -> $roots" >&2; exit 1 ;;
-    esac
+
+    listing=$(unzip -Z1 "$pak")
+    # Directories at the archive root. These are the constrained ones:
+    # SE only accepts standard names here (catalogs, models, textures...).
+    root_dirs=$(grep '/' <<<"$listing" | cut -d/ -f1 | sort -u | tr '\n' ' ')
+    # Files at the archive root. Unconstrained, but we require the docs.
+    root_files=$(grep -v '/' <<<"$listing" | sort | tr '\n' ' ')
+
+    if [ "$root_dirs" != "catalogs " ]; then
+        echo "    $name.pak: BAD ROOT FOLDER -> $root_dirs" >&2
+        exit 1
+    fi
+    for doc in README.md CITATIONS.txt; do
+        if ! grep -qx "$doc" <<<"$listing"; then
+            echo "    $name.pak: MISSING $doc at root (have: $root_files)" >&2
+            exit 1
+        fi
+    done
+    echo "    $name.pak: OK (dirs: $root_dirs| files: $root_files)"
 done
 
 echo
