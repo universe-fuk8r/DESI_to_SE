@@ -57,18 +57,20 @@ close to Earth. Quality cut is `ZWARN==0` and `ZCAT_PRIMARY==True`
 Prebuilt tiers are attached to [Releases](../../releases). No Python, no
 DESI download, no build. Each tier comes two ways — pick either:
 
-- **`DESI_DR1_<tier>.pak`** — the whole addon in one file. Drop it
-  straight into your `addons` folder. Nothing to unzip.
-- **`DESI_DR1_<tier>.zip`** — the same `.pak`, with the per-tier README
-  and `CITATIONS.txt` also unpacked alongside it so you can read them
-  without opening an archive. Unzip into `addons`, giving you:
+- **`DESI_DR1_<tier>.pak`** — the whole addon in one file, README and
+  citations included. Drop it straight into your `addons` folder. That's
+  the entire install: no folder to create, nothing to unpack.
+- **`DESI_DR1_<tier>.zip`** — the same `.pak`, with the README and
+  `CITATIONS.txt` also unpacked alongside it so you can read them without
+  opening an archive. Unzip into `addons`, giving you
+  `addons/DESI_DR1_<tier>/DESI_DR1_<tier>.pak` — which SE loads exactly
+  the same as a bare `.pak`.
 
-  ```
-  addons/DESI_DR1_heavy/
-    DESI_DR1_heavy.pak      <- leave this packed
-    README.md
-    CITATIONS.txt
-  ```
+So the minimal install is just:
+
+```
+...\addons\DESI_DR1_heavy.pak
+```
 
 Then launch SpaceEngine. The catalog loads at startup — expect a
 noticeably longer first launch on heavy and insane. **Leave the `.pak`

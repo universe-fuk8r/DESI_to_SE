@@ -47,9 +47,10 @@ distances, mapping the actual large-scale structure of the universe out to
 Pick either asset below:
 
 - `DESI_DR1_{TIER}.pak` — the whole addon in one file. Drop it into your
-  `addons` folder. Nothing to unzip.
+  `addons` folder. No folder to create, nothing to unpack.
 - `DESI_DR1_{TIER}.zip` — the same `.pak`, with the README and
-  CITATIONS.txt also unpacked alongside it. Unzip into `addons`.
+  CITATIONS.txt also unpacked alongside it. Unzip into `addons`; SE loads
+  `addons/DESI_DR1_{TIER}/DESI_DR1_{TIER}.pak` just the same.
 
 Then launch SpaceEngine. **Leave the `.pak` packed either way** —
 SpaceEngine reads it as an archive.

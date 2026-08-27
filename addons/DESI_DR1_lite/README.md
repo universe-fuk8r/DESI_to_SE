@@ -25,13 +25,17 @@ correct comoving distances under DESI's fiducial flat ΛCDM cosmology
 
 ## Installation
 
-Copy this whole `DESI_DR1_lite` folder into a SpaceEngine `addons`
-directory. As of SpaceEngine 0.991.50.2140 (May 2026) there are three
-places SE looks:
+Drop `DESI_DR1_lite.pak` into a SpaceEngine `addons` directory.
+That's the entire install — no folders to create, nothing to unpack.
+
+As of SpaceEngine 0.991.50.2140 (May 2026) there are three places SE
+looks for addons:
 
 ```
-%USERPROFILE%\Documents\Cosmographic\SpaceEngine\addons\   <- recommended
-SpaceEngine\addons\                                          (Steam install folder)
+%USERPROFILE%\Documents\Cosmographic\SpaceEngine\addons\
+    ^ recommended
+SpaceEngine\addons\
+    the Steam install folder
 SpaceEngine\data\
 ```
 
@@ -39,21 +43,23 @@ The Documents location is recommended — Steam can overwrite the install
 folder when the game updates or you verify file integrity, which would
 take the addon with it.
 
-You should end up with:
+So you want this, and nothing more:
 
 ```
-...\addons\DESI_DR1_lite\
-    DESI_DR1_lite.pak
-    README.md
-    CITATIONS.txt
+...\addons\DESI_DR1_lite.pak
 ```
 
-**Leave the `.pak` packed.** SpaceEngine reads it as an archive; it does
-not need unpacking. Then launch SpaceEngine — the catalog loads at
-startup. Expect a noticeably longer first launch on the heavy and
-insane tiers.
+**Leave the `.pak` packed.** SpaceEngine reads it as an archive; unpacking
+it is unnecessary. This README and `CITATIONS.txt` are inside it.
 
-To uninstall, delete this folder. Nothing is written outside it.
+If you prefer to keep things tidy, a subfolder works identically:
+`...\addons\DESI_DR1_lite\DESI_DR1_lite.pak` loads the
+same way.
+
+Then launch SpaceEngine — the catalog loads at startup. Expect a
+noticeably longer first launch on the heavy and insane tiers.
+
+To uninstall, delete the `.pak`. Nothing is written outside it.
 
 ### If the addon doesn't show up
 
@@ -63,9 +69,8 @@ To uninstall, delete this folder. Nothing is written outside it.
   entries that can hide a newly added addon.
 - **Check `se.log`** in SpaceEngine's system folder for catalog parse
   errors.
-- **Don't nest the folder.** If your unzip tool produced
-  `DESI_DR1_lite\DESI_DR1_lite\`, move the inner one up a
-  level.
+- **Check the `.pak` sits directly in `addons`** — not inside a
+  `catalogs` subfolder, and not one level above `addons`.
 
 ## Recommendations for the best experience
 
