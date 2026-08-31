@@ -146,8 +146,7 @@ is an explicitly supported layout. We ship paks because they're one file.
 
 ## Distribution decisions
 
-- **GitHub only, never Steam Workshop.** Declined to avoid Steam's tax
-  questionnaire. Do not reintroduce Workshop framing.
+- **GitHub only, never Steam Workshop.** A deliberate choice, not an oversight — do not reintroduce Workshop framing.
 - Each tier ships twice: a bare `.pak` (drop into `addons`, no unzip) and a
   `.zip` wrapping the same pak with loose copies of the docs.
 - Licensing: code MIT (the notice carries the repo URL, so forks point
